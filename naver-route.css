@@ -1,0 +1,26 @@
+.naver-route-panel {
+  margin: 0 16px 18px;
+}
+
+.naver-route-panel[hidden] {
+  display: none;
+}
+
+.naver-route-walk-button {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--bg-border);
+  border-radius: var(--radius-md);
+  background: #F5EEDF;
+  color: #705B3F;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 360px) {
+  .naver-route-walk-button { padding-inline: 8px; font-size: 12px; }
+}
