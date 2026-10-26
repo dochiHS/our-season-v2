@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'our-season-v2-5';
+const CACHE = 'our-season-v2-6';
 const PRECACHE_FILES = [
   './',
   'index.html',
@@ -25,6 +25,12 @@ const PRECACHE_FILES = [
   'point-sheet.js',
   'shell.js',
   'logo-mark.png',
+  'icon-local.svg',
+  'icon-my-photos.svg',
+  'icon-guide.svg',
+  'icon-notice.svg',
+  'icon-about.svg',
+  'icon-filter.svg',
   'image-compressor.js',
   'upload-validator.js',
   'invite.js',

@@ -6,3 +6,6 @@
 /* 숨김 처리는 디자인보다 항상 우선 */
 [hidden] { display: none !important; }
 img.brand-logo { object-fit: contain; }
+/* 예전 목록 카드 규칙(가로형 썸네일·화살표)이 새 카드에 섞이지 않게 */
+.spots-screen .spot-list-thumbnail { width: 100%; height: auto; flex: none; }
+.spots-screen .spot-list-card-arrow { display: none; }
