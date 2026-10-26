@@ -26,7 +26,7 @@
     if (!appContainer) return null;
     const section = document.createElement('section');
     section.id = 'season-screen'; section.className = 'screen season-screen'; section.setAttribute('aria-label', '계절 펼침 화면'); section.hidden = true;
-    section.innerHTML = '<header class="season-topbar"><button class="back-button season-back-button" type="button" aria-label="명소 화면으로 돌아가기">‹</button><div class="season-heading"><h1 class="season-heading-title"></h1><p class="season-heading-point"></p></div><span class="season-topbar-spacer" aria-hidden="true"></span></header><nav class="season-tabs" role="tablist" aria-label="계절 선택"></nav><main class="season-view-content"><div class="season-photo-area"><div class="season-photo-stack"></div><div class="season-photo-meta"><p class="season-photo-tags"></p><p class="season-photo-memo"></p><p class="season-photo-credit"></p><p class="season-photo-heading-line" hidden></p><p class="season-reference-notice" hidden></p></div></div><div class="season-photo-navigation" aria-label="사진 탐색"><button class="season-nav-button season-previous" type="button" aria-label="이전 사진">‹</button><span class="season-photo-count" aria-live="polite"></span><button class="season-nav-button season-next" type="button" aria-label="다음 사진">›</button></div><section class="other-seasons-section"><h2>같은 자리, 다른 계절</h2><div class="other-seasons-grid"></div></section></main>';
+    section.innerHTML = '<header class="season-topbar"><button class="back-button season-back-button" type="button" aria-label="명소 화면으로 돌아가기">‹</button><div class="season-heading"><h1 class="season-heading-title"></h1><p class="season-heading-point"></p></div><span class="season-topbar-spacer" aria-hidden="true"></span></header><nav class="season-tabs" role="tablist" aria-label="계절 선택"></nav><main class="season-view-content"><div class="season-photo-area"><div class="season-photo-stack"></div><div class="season-photo-meta"><p class="season-photo-tags"></p><p class="season-photo-memo"></p><p class="season-photo-credit"></p><p class="season-photo-heading-line" hidden></p><p class="season-reference-notice" hidden></p></div></div><div class="season-photo-navigation" aria-label="사진 탐색"><button class="season-nav-button season-previous" type="button" aria-label="이전 사진">‹</button><span class="season-photo-count" aria-live="polite"></span><button class="season-nav-button season-next" type="button" aria-label="다음 사진">›</button></div><section class="season-grid-section" aria-label="이 계절 사진 모아 보기"><div class="season-photo-grid"></div></section><section class="other-seasons-section"><h2>같은 자리, 다른 계절</h2><div class="other-seasons-grid"></div></section></main>';
     appContainer.appendChild(section);
     section.querySelector('.season-back-button').addEventListener('click', () => { const route = routeFromHash(); if (route.spotId) goBack(`#/spot/${encodeURIComponent(route.spotId)}`); });
     section.querySelector('.season-previous').addEventListener('click', () => showSeasonPhoto(-1));
@@ -179,6 +179,18 @@
         }
       }
       count.textContent = `${currentIndex + 1} / ${photos.length}`; previous.disabled = currentIndex === 0; next.disabled = currentIndex === photos.length - 1;
+    }
+    const grid = seasonScreen.querySelector('.season-photo-grid');
+    if (grid) {
+      grid.replaceChildren();
+      grid.parentElement.hidden = photos.length < 2;
+      photos.forEach((item, index) => {
+        const tile = document.createElement('button'); tile.type = 'button'; tile.className = `season-grid-tile${index === (state.photoIndex || 0) ? ' is-current' : ''}`;
+        tile.setAttribute('aria-label', `${seasonNames[route.season]} 사진 ${index + 1} 크게 보기`);
+        const tileImage = document.createElement('img'); tileImage.src = isReference ? (item.thumb || item.image) : item.dataUrl; tileImage.alt = ''; tileImage.loading = 'lazy'; tile.appendChild(tileImage);
+        tile.addEventListener('click', () => { state.photoIndex = index; renderSeasonScreen(routeFromHash()); global.scrollTo({ top: 0, behavior: 'smooth' }); });
+        grid.appendChild(tile);
+      });
     }
     const tiles = seasonScreen.querySelector('.other-seasons-grid'); tiles.replaceChildren();
     seasons.forEach(season => {

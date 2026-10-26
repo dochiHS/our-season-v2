@@ -77,6 +77,7 @@
           <h2 id="auth-title" class="sheet-title">로그인</h2>
           <button class="btn-close-modal auth-close" type="button" aria-label="닫기">×</button>
         </div>
+        <div class="auth-brand"><img class="brand-logo brand-logo-lg" src="logo-mark.png" alt="" aria-hidden="true"><p class="auth-brand-name">그 자리, 그 계절</p><p class="auth-brand-sub">KOREA · PHOTO ARCHIVE</p></div>
         <p class="auth-intro">사진을 올리려면 로그인이 필요해요. 사진 보기는 로그인 없이 할 수 있어요.</p>
         <div class="auth-tabs" role="tablist" aria-label="로그인 방법">
           <button class="auth-tab is-active" type="button" role="tab" aria-selected="true" data-auth-mode="login">로그인</button>
