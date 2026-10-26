@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'our-season-v2-6';
+const CACHE = 'our-season-v2-7';
 const PRECACHE_FILES = [
   './',
   'index.html',
@@ -14,6 +14,8 @@ const PRECACHE_FILES = [
   'shell.css',
   'design.css',
   'empty-state.css',
+  'detail-v2.css',
+  'icon-back.svg',
   'geo-calculator.js',
   'exif-gps-reader.js',
   'photo-heading.js',

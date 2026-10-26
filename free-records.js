@@ -13,7 +13,7 @@
     screen = document.createElement('section');
     screen.id = 'free-records-screen'; screen.className = 'screen free-records-screen';
     screen.setAttribute('aria-label', '우리 동네 기록'); screen.hidden = true;
-    screen.innerHTML = '<header class="screen-topbar free-records-topbar"><button class="back-button free-records-back" type="button" aria-label="첫 화면으로 돌아가기">‹</button><h1 class="free-records-title">우리 동네 기록</h1><span class="free-records-topbar-spacer" aria-hidden="true"></span></header><nav class="free-records-filters" aria-label="기록 필터"><div class="free-records-filter-row free-records-city-filter" role="group" aria-label="시·군 선택"></div><div class="free-records-filter-row free-records-season-filter" role="group" aria-label="계절 선택"></div></nav><main class="free-record-list" aria-live="polite"></main><div class="free-records-bottom-bar"><button class="btn-submit-upload free-records-upload-button" type="button"><img src="my-photos-icon.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22"> 우리 동네 기록 올리기</button></div>';
+    screen.innerHTML = '<header class="screen-topbar free-records-topbar"><button class="back-button free-records-back" type="button" aria-label="첫 화면으로 돌아가기">‹</button><h1 class="free-records-title">우리 동네 기록</h1><span class="free-records-topbar-spacer" aria-hidden="true"></span></header><nav class="free-records-filters" aria-label="기록 필터"><div class="free-records-filter-row free-records-city-filter" role="group" aria-label="시·군 선택"></div><div class="free-records-filter-row free-records-season-filter" role="group" aria-label="계절 선택"></div></nav><main class="free-record-list" aria-live="polite"></main><div class="free-records-bottom-bar"><button class="btn-submit-upload free-records-upload-button" type="button"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3v10H4z"/><circle cx="12" cy="13.2" r="3.2"/></svg> 우리 동네 기록 올리기</button></div>';
     app.appendChild(screen); list = screen.querySelector('.free-record-list');
     screen.querySelector('.free-records-back').addEventListener('click', () => { if (global.Screens) global.Screens.goBack('#/'); else global.location.hash = '#/'; });
     screen.querySelector('.free-records-upload-button').addEventListener('click', () => global.FreeUpload && global.FreeUpload.open());
@@ -167,7 +167,7 @@
       const city = document.createElement('p'); city.className = 'free-record-city'; city.textContent = locationName(row); cityRow.appendChild(city);
       if (coordinates(row) && row.id !== null && row.id !== undefined) {
         const button = document.createElement('button'); button.type = 'button'; button.className = 'free-record-location-button';
-        const pinIcon = document.createElement('img'); pinIcon.src = 'icon-pin.png'; pinIcon.alt = ''; pinIcon.setAttribute('aria-hidden', 'true'); pinIcon.className = 'ui-icon ui-icon-16';
+        const pinIcon = document.createElement('span'); pinIcon.innerHTML = '<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>'; pinIcon.setAttribute('aria-hidden', 'true');
         button.append(pinIcon, document.createTextNode(' 위치 보기'));
         button.addEventListener('click', () => { lastListHash = currentListHash(); pendingPlaceNavigation = true; global.location.hash = `#/local/place/${encodeURIComponent(String(row.id))}`; });
         cityRow.appendChild(button);

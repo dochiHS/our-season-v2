@@ -313,7 +313,7 @@
           <div class="form-group">
             <label class="form-label" for="free-photo-file">사진 파일 (JPEG/PNG)</label>
             <label for="free-photo-file" class="file-upload-box">
-              <span class="upload-icon"><img src="my-photos-icon.png" alt="" aria-hidden="true" class="ui-icon ui-icon-28"></span><span class="upload-main-text" id="free-file-name">사진 선택하기</span>
+              <span class="upload-icon"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3v10H4z"/><circle cx="12" cy="13.2" r="3.2"/></svg></span><span class="upload-main-text" id="free-file-name">사진 선택하기</span>
               <span class="upload-sub-text">국내에서 찍은 원본 사진 (위치 정보 필수)</span>
             </label>
             <input type="file" id="free-photo-file" accept="image/jpeg,image/png,image/jpg" style="display:none;">

@@ -97,12 +97,34 @@
       chip.addEventListener('click', () => { state.currentPointId = point.id; renderSummaryCard(); renderPointTabs(); renderMatrix(); if (global.SpotMap) global.SpotMap.refresh(false); }); elements.pointTabs.appendChild(chip);
     });
   }
+  const LINE_ICONS = {
+    pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
+    sun: '<circle cx="12" cy="12" r="3.6"/><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6 18 18M6 18l1.4-1.4M16.6 7.4 18 6"/>',
+    clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    car: '<path d="M5 16.5V12l1.8-4.2A2 2 0 0 1 8.6 6.5h6.8a2 2 0 0 1 1.8 1.3L19 12v4.5"/><path d="M4 16.5h16M5 12h14"/><circle cx="8" cy="16.5" r="1.6"/><circle cx="16" cy="16.5" r="1.6"/>',
+    note: '<path d="M6.5 3.5h8l3 3v14h-11z"/><path d="M14.5 3.5v3h3M9 11h6M9 14.5h6M9 18h3.5"/>',
+    camera: '<path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3v10H4z"/><circle cx="12" cy="13.2" r="3.2"/>'
+  };
+  global.LINE_ICONS = LINE_ICONS;
   function renderSummaryCard() {
     if (!elements.spotSummaryCard) return;
     const spot = getCurrentSpot();
     if (!spot) { elements.spotSummaryCard.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">명소 정보를 불러올 수 없습니다.</p>'; return; }
     const point = getCurrentPoint(spot), sun = spot.sunTimes || { sunrise: '--:--', sunset: '--:--' }, radius = point && Number.isFinite(Number(point.radiusMeters)) ? Number(point.radiusMeters) : 500;
-    elements.spotSummaryCard.innerHTML = `<div class="summary-header"><div><h2 class="spot-name">${spot.name}</h2><span class="point-name-badge"><img src="icon-pin.png" alt="" aria-hidden="true" class="ui-icon ui-icon-16"> ${point ? point.name : '대표 위치'} (반경 ${radius}m)</span></div><div class="sun-times-pill" title="오늘의 일출·일몰 시각"><span class="sun-item"><img src="icon-sunrise.png" alt="" aria-hidden="true" class="ui-icon ui-icon-18"> ${sun.sunrise}</span><span class="sun-sep">|</span><span class="sun-item"><img src="icon-sunset.png" alt="" aria-hidden="true" class="ui-icon ui-icon-18"> ${sun.sunset}</span></div></div><div class="spot-meta-list"><div class="meta-item"><span class="meta-icon">⏱️</span><span class="meta-label">운영시간</span><span class="meta-val">${spot.operatingHours || '상시 개방'}</span></div><div class="meta-item"><span class="meta-icon"><img src="icon-car.png" alt="" aria-hidden="true" class="ui-icon ui-icon-18"></span><span class="meta-label">주차안내</span><span class="meta-val">${spot.parking || '주차 가능'}</span></div><div class="meta-item"><span class="meta-icon"><img src="icon-memo.png" alt="" aria-hidden="true" class="ui-icon ui-icon-18"></span><span class="meta-label">주의메모</span><span class="meta-val">${spot.safetyNotice || '현장 확인 예정'}</span></div></div>`;
+    const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    const icon = name => `<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true">${LINE_ICONS[name] || ''}</svg>`;
+    elements.spotSummaryCard.innerHTML = `<h2 class="spot-name">${esc(spot.name)}</h2><p class="spot-address">${icon('pin')}<span>${esc(spot.fullAddress || spot.address || '')}</span></p>${spot.description ? `<p class="spot-desc">${esc(spot.description)}</p>` : ''}`;
+    const info = document.getElementById('spot-info');
+    if (info) {
+      const rows = [
+        ['sun', '일출 · 일몰', `${sun.sunrise} · ${sun.sunset} (오늘)`],
+        ['pin', '촬영 지점', `${point ? point.name : '대표 위치'} · 반경 ${radius}m`],
+        ['clock', '운영시간', spot.operatingHours || '상시 개방'],
+        ['car', '주차', spot.parking || '현장 확인 예정'],
+        ['note', '주의 메모', spot.safetyNotice || '현장 확인 예정']
+      ];
+      info.innerHTML = `<h3 id="spot-info-title" class="spot-info-title">촬영 정보</h3><ul class="spot-info-list">${rows.map(([key, label, value]) => `<li class="spot-info-item">${icon(key)}<span class="spot-info-text"><span class="spot-info-label">${esc(label)}</span><span class="spot-info-value">${esc(value)}</span></span></li>`).join('')}</ul>`;
+    }
     if (elements.uploadTargetName) elements.uploadTargetName.textContent = `${spot.name} (${point ? point.name : '대표 위치'})`;
   }
   function renderMatrix() {

@@ -1,0 +1,93 @@
+/* 명소 상세 화면: 시안 2번처럼 상자 없이 사진 → 이름·설명 → 계절 사진 → 촬영 정보 순서
+   design.css의 색 변수를 그대로 씁니다. 마지막에 불러옵니다. */
+
+/* 공통 선 아이콘 */
+.line-icon { width: 20px; height: 20px; flex: 0 0 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 뒤로 가기: 둥근 그림 대신 얇은 화살표 */
+.back-button, .season-back-button, .free-records-back {
+  width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px;
+  background: none !important; box-shadow: none !important;
+  font-size: 0; color: var(--text-primary);
+  position: relative;
+}
+.back-button::after, .season-back-button::after, .free-records-back::after {
+  content: ""; position: absolute; inset: 8px;
+  background-color: currentColor;
+  -webkit-mask: url("icon-back.svg") center / contain no-repeat;
+  mask: url("icon-back.svg") center / contain no-repeat;
+}
+
+/* 위 막대: 선 없이 가볍게 */
+.detail-topbar { border-bottom: 0; background: var(--bg-primary); }
+
+/* 대표 사진: 화면 폭 가득, 둥근 상자 없이 */
+.detail-screen .season-slideshow { margin: 0; }
+.detail-screen .season-slideshow-frame { border-radius: 0; aspect-ratio: 4 / 3.2; }
+.detail-screen .season-slideshow-dots { margin-top: 10px; }
+
+/* 이름·주소·설명: 상자 없이 */
+.detail-screen .spot-summary-card {
+  margin: 0; padding: 20px 20px 6px;
+  border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important;
+}
+.detail-screen .spot-name { margin: 0; font-size: 24px; font-weight: 850; letter-spacing: -.045em; line-height: 1.25; color: var(--text-primary); }
+.spot-address { display: flex; align-items: center; gap: 5px; margin: 8px 0 0; color: var(--text-secondary); font-size: 13px; }
+.spot-address .line-icon { width: 16px; height: 16px; flex-basis: 16px; color: var(--text-muted); }
+.spot-desc { margin: 14px 0 0; color: var(--text-secondary); font-size: 14px; line-height: 1.65; }
+
+/* 촬영 지점 칩 */
+.detail-screen .point-tabs-section { padding: 10px 20px 4px; }
+
+/* 계절 사진: 상자 없이 4칸 썸네일 */
+.detail-screen .matrix-section {
+  margin: 0; padding: 18px 20px 8px;
+  border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important;
+}
+.detail-screen .matrix-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.detail-screen .season-pile { gap: 6px; padding: 0; border: 0 !important; background: none !important; box-shadow: none !important; }
+.detail-screen .season-pile-stack { aspect-ratio: 1 / 1; }
+.detail-screen .season-pile-back { display: none; }
+.detail-screen .season-pile-cover { inset: 0; border: 0; border-radius: 10px; }
+.detail-screen .season-pile-tags { display: none; }
+.detail-screen .season-pile.is-current-season .season-pile-cover,
+.detail-screen .season-pile.is-current-season .season-pile-empty { box-shadow: 0 0 0 2px var(--color-primary-dark); }
+.detail-screen .season-pile-empty {
+  inset: 0; border: 0 !important; border-radius: 10px; background: #EEEDEA !important;
+  font-size: 0; color: transparent;
+}
+.detail-screen .season-pile-empty::after {
+  content: ""; position: absolute; inset: 32%;
+  background-color: #B5B2AC;
+  -webkit-mask: url("icon-my-photos.svg") center / contain no-repeat;
+  mask: url("icon-my-photos.svg") center / contain no-repeat;
+}
+.detail-screen .season-pile-caption { justify-content: center; }
+.detail-screen .season-pile-name { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+.detail-screen .season-pile.is-current-season .season-pile-name { color: var(--color-primary-dark); font-weight: 800; }
+.detail-screen .season-pile-count { display: none; }
+.detail-screen .reference-photo-badge { display: none; }
+
+/* 촬영 정보: 아이콘 + 제목 + 값, 상자 없이 */
+.spot-info { padding: 18px 20px 8px; }
+.spot-info-title { margin: 0 0 6px; font-size: 18px; font-weight: 850; letter-spacing: -.04em; color: var(--text-primary); }
+.spot-info-list { margin: 0; padding: 0; list-style: none; }
+.spot-info-item { display: flex; align-items: flex-start; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--bg-border); }
+.spot-info-item:last-child { border-bottom: 0; }
+.spot-info-item .line-icon { margin-top: 1px; color: var(--text-secondary); }
+.spot-info-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.spot-info-label { font-size: 13px; font-weight: 750; color: var(--text-primary); }
+.spot-info-value { font-size: 13px; color: var(--text-secondary); }
+
+/* 지도: 상자 대신 둥근 지도만 */
+.detail-screen .spot-map-section { margin: 12px 20px 0; padding: 0; border: 0 !important; background: none !important; box-shadow: none !important; }
+
+/* 아래 버튼: 시안처럼 진한 둥근 버튼 */
+.detail-screen .btn-upload-action { border-radius: 999px; }
+.btn-upload-action .line-icon, .btn-icon .line-icon { width: 20px; height: 20px; color: #fff; }
+.upload-icon .line-icon { width: 28px; height: 28px; color: var(--text-secondary); }
+.free-record-location-button .line-icon { width: 16px; height: 16px; vertical-align: -3px; }
+
+/* 사용법 창: 제목과 설명을 줄 나눠 보기 */
+.info-steps li > b, .info-notices li > b { display: block; margin-bottom: 2px; color: var(--text-primary); }
+.detail-screen .matrix-table-wrap { padding: 0; border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; overflow: visible; }
