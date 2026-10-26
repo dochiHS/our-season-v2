@@ -207,6 +207,7 @@
     if (hash === '#/' || hash === '#') tab = 'home';
     else if (hash === '#/spots') tab = 'spots';
     else if (hash === '#/me' || hash === '#/my-photos') tab = 'me';
+    else if (hash === '#/saved') tab = 'saved';
     const show = tab !== null;
     tabbar.hidden = !show;
     document.body.classList.toggle('has-tabbar', show);

@@ -67,6 +67,7 @@
     if (hash === '#/spots') return { screen: 'spots' };
     if (hash === '#/my-photos') return { screen: 'my-photos' };
     if (hash === '#/me') return { screen: 'me' };
+    if (hash === '#/saved') return { screen: 'saved' };
     let match = hash.match(/^#\/local\/place\/([^/?]+)$/);
     if (match) { try { return { screen: 'local-place', recordId: decodeURIComponent(match[1]) }; } catch (error) { return { screen: 'local-place', recordId: '' }; } }
     match = hash.match(/^#\/local(?:\?(.+))?$/);
@@ -205,7 +206,7 @@
     lastScreenKey = nextScreenKey;
     if (!isCompass && global.Compass) global.Compass.close();
     home.hidden = !isHome; listScreen.hidden = !isList; detailScreen.hidden = route.screen !== 'detail'; if (compassScreen) compassScreen.hidden = !isCompass;
-    const meScreen = document.getElementById('me-screen'); if (meScreen) meScreen.hidden = route.screen !== 'me';
+    const meScreen = document.getElementById('me-screen'); if (meScreen) meScreen.hidden = route.screen !== 'me'; const savedScreen = document.getElementById('saved-screen'); if (savedScreen) savedScreen.hidden = route.screen !== 'saved';
     const myPhotosScreen = document.getElementById('my-photos-screen'); if (myPhotosScreen) myPhotosScreen.hidden = route.screen !== 'my-photos';
     if (route.screen === 'my-photos' && global.MyPhotos) global.MyPhotos.open(); else if (global.MyPhotos) global.MyPhotos.close();
     const localScreen = document.getElementById('free-records-screen'), localPlaceScreen = document.getElementById('free-record-place-screen'); if (localScreen) localScreen.hidden = !isLocal; if (localPlaceScreen) localPlaceScreen.hidden = !isLocalPlace; if (seasonScreen) seasonScreen.hidden = !isSeason;
@@ -222,7 +223,7 @@
     }
     if (isCompass) { const spot = global.App && global.App.state && global.App.state.spots.find(item => item.id === route.spotId); if (!spot) { navigate('#/spots', false, true); return; } global.App.selectSpot(route.spotId); if (global.Compass) global.Compass.open(route.spotId, route.pointId, route.heading); }
     if (isSeason) { const spot = global.App && global.App.state && global.App.state.spots.find(item => item.id === route.spotId); if (!spot) { navigate('#/spots', false, true); return; } global.App.selectSpot(route.spotId); restoreSeasonContext(route); state.photoIndex = 0; renderSeasonScreen(route); }
-    if (isHome || isList || isLocal || isLocalPlace || route.screen === 'my-photos' || route.screen === 'me') state.lastSeasonContext = null;
+    if (isHome || isList || isLocal || isLocalPlace || route.screen === 'my-photos' || route.screen === 'me' || route.screen === 'saved') state.lastSeasonContext = null;
     state.activeScreen = route.screen;
     global.requestAnimationFrame(() => {
       if (!screenChanged) return;
