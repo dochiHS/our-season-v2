@@ -5,3 +5,4 @@
 .home-browse-strip, .spot-region-row, .spot-season-row { -webkit-overflow-scrolling: touch; }
 /* 숨김 처리는 디자인보다 항상 우선 */
 [hidden] { display: none !important; }
+img.brand-logo { object-fit: contain; }

@@ -105,7 +105,7 @@
       const thumb = document.createElement('span'); thumb.className = `spot-list-thumbnail${spotPhotos.length || referencePhoto ? '' : ' is-empty'}`; thumb.dataset.season = listSeason === 'all' ? season : listSeason;
       if (spotPhotos.length) { const image = document.createElement('img'); image.src = spotPhotos[0].dataUrl; image.alt = `${spot.name} 최근 승인 사진`; image.loading = 'lazy'; thumb.appendChild(image); }
       else if (referencePhoto) { const image = document.createElement('img'); image.src = referencePhoto.thumb; image.alt = `${spot.name} 참고 사진`; image.loading = 'lazy'; thumb.appendChild(image); const badge = document.createElement('span'); badge.className = 'spot-list-reference-badge'; badge.textContent = '참고'; thumb.appendChild(badge); }
-      else { thumb.setAttribute('aria-label', '아직 승인된 사진이 없습니다'); const wait = document.createElement('span'); wait.className = 'spot-list-wait'; wait.textContent = listSeason === 'all' ? '사진을 기다려요' : `${(global.SpotData.SEASONS_KO || {})[listSeason] || ''} 사진을 기다려요`; thumb.appendChild(wait); }
+      else { thumb.setAttribute('aria-label', '아직 승인된 사진이 없습니다'); thumb.classList.add('photo-placeholder'); thumb.insertAdjacentHTML('beforeend', '<svg class="photo-placeholder-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2.5"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M4 17l4.8-4.6 3.4 3.1 2.6-2.4L20 17.5"></path></svg>'); thumb.setAttribute('aria-label', listSeason === 'all' ? '사진 없음' : `${(global.SpotData.SEASONS_KO || {})[listSeason] || ''} 사진 없음`); }
       const body = document.createElement('span'); body.className = 'spot-list-card-body'; const name = document.createElement('span'); name.className = 'spot-list-card-name'; name.textContent = spot.name; body.appendChild(name);
       if (spot.address) { const address = document.createElement('span'); address.textContent = spot.address; address.style.fontSize = '12px'; address.style.color = 'var(--text-secondary)'; address.style.display = 'block'; body.appendChild(address); }
       const meta = document.createElement('span'); meta.className = 'spot-list-card-meta';
@@ -116,6 +116,12 @@
     });
   }
 
+  function updateFilterLabel() {
+    const label = document.getElementById('spot-filter-label'); if (!label) return;
+    const parts = []; if (state.region !== 'all') parts.push(state.region); if (state.sort === 'nearest') parts.push('가까운 순');
+    label.textContent = parts.length ? parts.join(' · ') : '필터';
+    const button = document.getElementById('btn-open-filter'); if (button) button.classList.toggle('is-active', parts.length > 0);
+  }
   function renderRegionChips() {
     const row = document.getElementById('spot-region-row'); if (!row || !global.App || !global.App.state) return;
     const spots = global.App.state.spots || [], order = (global.SpotData && global.SpotData.SIDO_ORDER) || [];
@@ -126,12 +132,12 @@
       chip.setAttribute('aria-pressed', state.region === key ? 'true' : 'false');
       chip.innerHTML = `<span></span><span class="spot-region-count"></span>`; chip.firstChild.textContent = label; chip.lastChild.textContent = String(count);
       chip.setAttribute('aria-label', `${label} 명소 ${count}곳`);
-      chip.addEventListener('click', () => { state.region = key; renderRegionChips(); renderSpotList(); });
+      chip.addEventListener('click', () => { state.region = key; renderRegionChips(); renderSpotList(); updateFilterLabel(); });
       row.appendChild(chip);
     });
   }
   function setListSeason(season) { state.listSeason = season; document.querySelectorAll('[data-list-season]').forEach(button => button.setAttribute('aria-pressed', button.dataset.listSeason === season ? 'true' : 'false')); renderSpotList(); }
-  function setSort(sort) { state.sort = sort; document.querySelectorAll('[data-spot-sort]').forEach(button => { const active = button.dataset.spotSort === sort; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', active ? 'true' : 'false'); }); renderSpotList(); }
+  function setSort(sort) { state.sort = sort; global.setTimeout(updateFilterLabel, 0); document.querySelectorAll('[data-spot-sort]').forEach(button => { const active = button.dataset.spotSort === sort; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', active ? 'true' : 'false'); }); renderSpotList(); }
   function getFilterValues() { const activeTime = document.querySelector('[data-gallery-time].is-active'), weather = document.getElementById('gallery-weather-filter'); return { time: activeTime ? activeTime.dataset.galleryTime || 'all' : 'all', weather: weather ? weather.value || 'all' : 'all' }; }
   function seasonHash(spotId, season, context) { const params = new URLSearchParams(); if (context.pointId) params.set('point', context.pointId); if (context.time && context.time !== 'all') params.set('time', context.time); if (context.weather && context.weather !== 'all') params.set('weather', context.weather); const query = params.toString(); return `#/spot/${encodeURIComponent(spotId)}/season/${season}${query ? `?${query}` : ''}`; }
   function getSeasonPhotos(spotId, pointId, season, filters) { const photos = global.App && global.App.state ? global.App.state.approvedPhotos || [] : []; return photos.filter(photo => photo.spotId === spotId && photo.pointId === pointId && photo.season === season && (!filters || ((filters.time === 'all' || photo.timeOfDay === filters.time) && (filters.weather === 'all' || photo.weather === filters.weather)))).slice().sort((a, b) => String(b.uploadedAt || '').localeCompare(String(a.uploadedAt || ''))); }
@@ -275,7 +281,7 @@
     currentDepth = 0;
     global.history.replaceState({ ...initialState, __appDepth: 0 }, '', `${global.location.pathname}${global.location.search}${global.location.hash || '#/'}`);
     if (!global.location.hash) global.history.replaceState({ ...stateObject(), __appDepth: 0 }, '', `${global.location.pathname}${global.location.search}#/`);
-    document.getElementById('btn-open-spots').addEventListener('click', () => navigate('#/spots', true)); document.getElementById('btn-open-local-records').addEventListener('click', () => navigate('#/local')); document.getElementById('btn-list-back').addEventListener('click', () => goBack('#/')); document.getElementById('btn-detail-back').addEventListener('click', () => goBack('#/spots'));
+    document.getElementById('btn-open-spots').addEventListener('click', () => navigate('#/spots', true)); const localRecordsButton = document.getElementById('btn-open-local-records'); if (localRecordsButton) localRecordsButton.addEventListener('click', () => navigate('#/local')); document.getElementById('btn-list-back').addEventListener('click', () => goBack('#/')); document.getElementById('btn-detail-back').addEventListener('click', () => goBack('#/spots'));
     const compassLaunch = document.getElementById('btn-open-compass'); if (compassLaunch) compassLaunch.addEventListener('click', () => { const route = routeFromHash(), currentSpot = global.App && global.App.state && global.App.state.spots.find(item => item.id === route.spotId), currentPointId = currentSpot && currentSpot.points.some(point => point.id === global.App.state.currentPointId) ? global.App.state.currentPointId : currentSpot && currentSpot.points[0] && currentSpot.points[0].id; if (currentSpot && currentPointId) navigate(`#/spot/${encodeURIComponent(currentSpot.id)}/compass?point=${encodeURIComponent(currentPointId)}`); });
     document.querySelectorAll('[data-spot-sort]').forEach(button => button.addEventListener('click', async () => { if (button.dataset.spotSort !== 'nearest') { state.locationError = ''; setSort('name'); return; } state.locationError = ''; setSort('nearest'); if (global.App && global.App.requestUserLocation) { const located = await global.App.requestUserLocation(true); state.locationError = located ? '' : '위치를 확인할 수 없어 가까운 순으로 정렬할 수 없어요.'; renderSpotList(); } }));
     document.querySelectorAll('[data-list-season]').forEach(button => button.addEventListener('click', () => setListSeason(button.dataset.listSeason)));

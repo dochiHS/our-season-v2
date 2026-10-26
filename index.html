@@ -32,36 +32,29 @@
   <link rel="stylesheet" href="point-sheet.css">
   <link rel="stylesheet" href="ui-fixes.css">
   <link rel="stylesheet" href="shell.css">
-  <link rel="stylesheet" href="season-theme.css">
   <link rel="stylesheet" href="design.css">
+  <link rel="stylesheet" href="empty-state.css">
 </head>
 <body>
   <div id="app" class="app-container">
     <!-- 첫 화면: 위 막대 + 이번 계절 추천 명소 + 명소 둘러보기 -->
     <section id="home-screen" class="screen home-v2" aria-label="첫 화면">
       <header class="app-topbar">
-        <a class="app-brand" href="#/" aria-label="그 자리, 그 계절 첫 화면"><svg class="brand-logo" viewBox="0 0 30 36" aria-hidden="true"><path class="brand-logo-frame" d="M2 35V15A13 13 0 0 1 28 15V35Z"></path><path class="brand-logo-sky" d="M5 33V15.5A10 10 0 0 1 25 15.5V33Z"></path><circle class="brand-logo-sun" cx="15" cy="21" r="3.6"></circle><path class="brand-logo-hill" d="M5 26Q11 22.5 16 25T25 24.5V33H5Z"></path></svg><span class="app-brand-text"><span class="app-brand-name">그 자리, 그 계절</span><span class="app-brand-sub">KOREA · PHOTO ARCHIVE</span></span></a>
+        <a class="app-brand" href="#/" aria-label="그 자리, 그 계절 첫 화면"><img class="brand-logo" src="logo-mark.png" alt="" aria-hidden="true"><span class="app-brand-text"><span class="app-brand-name">그 자리, 그 계절</span><span class="app-brand-sub">KOREA · PHOTO ARCHIVE</span></span></a>
         <div class="app-topbar-actions"><button id="btn-open-spots" class="topbar-icon-button" type="button" aria-label="명소 검색"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5L20 20"></path></svg></button><button class="topbar-icon-button" type="button" data-open-drawer aria-label="메뉴 열기" aria-controls="app-drawer" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button></div>
       </header>
       <section id="home-hero" class="home-hero" aria-label="이번 계절 추천 명소"></section>
-      <section id="home-nearby" class="home-nearby" aria-label="내 주변 명소" hidden>
-        <button id="btn-home-nearby" class="home-nearby-button" type="button"><img src="icon-pin.png" alt="" aria-hidden="true" class="ui-icon ui-icon-28"><span class="home-nearby-text"><span class="home-nearby-title">내 주변 명소 보기</span><span id="home-nearby-sub" class="home-nearby-sub">위치를 한 번 허용하면 다음부터 가까운 순으로 보여 드려요</span></span><span aria-hidden="true" class="home-local-v2-arrow">›</span></button>
-      </section>
       <section class="home-browse" aria-labelledby="home-browse-title">
         <div class="home-section-head"><h2 id="home-browse-title" class="home-section-title">명소 둘러보기</h2><a class="home-section-more" href="#/spots" aria-label="명소 전체 보기">전체 보기 <span aria-hidden="true">→</span></a></div>
         <div id="home-browse-strip" class="home-browse-strip"></div>
-      </section>
-      <section class="home-local-card" aria-label="우리 동네 기록">
-        <button id="btn-open-local-records" class="home-local-v2" type="button"><span class="home-local-v2-icon"><img src="my-photos-icon.png" alt="" aria-hidden="true" class="ui-icon ui-icon-28"></span><span class="home-local-v2-text"><span class="home-local-v2-title">우리 동네 기록</span><span class="home-local-v2-sub">전국 어디서나 내 동네 사진을 남겨요</span></span><span aria-hidden="true" class="home-local-v2-arrow">›</span></button>
       </section>
     </section>
 
     <!-- 명소 목록 화면 -->
     <section id="spots-screen" class="screen spots-screen" aria-label="명소 목록" hidden>
-      <header class="app-topbar"><a class="app-brand" href="#/" aria-label="그 자리, 그 계절 첫 화면"><svg class="brand-logo" viewBox="0 0 30 36" aria-hidden="true"><path class="brand-logo-frame" d="M2 35V15A13 13 0 0 1 28 15V35Z"></path><path class="brand-logo-sky" d="M5 33V15.5A10 10 0 0 1 25 15.5V33Z"></path><circle class="brand-logo-sun" cx="15" cy="21" r="3.6"></circle><path class="brand-logo-hill" d="M5 26Q11 22.5 16 25T25 24.5V33H5Z"></path></svg><span class="app-brand-text"><span class="app-brand-name">명소</span><span id="spots-count-line" class="app-brand-sub">KOREA · SPOTS</span></span></a><div class="app-topbar-actions"><button class="topbar-icon-button" type="button" data-open-drawer aria-label="메뉴 열기" aria-controls="app-drawer" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button></div></header><div class="screen-topbar spots-search-row"><button id="btn-list-back" class="back-button" type="button" aria-label="첫 화면으로 돌아가기" hidden>‹</button><label class="screen-search-box" for="spot-search-input"><span class="search-icon" aria-hidden="true"></span><input id="spot-search-input" type="search" placeholder="명소·동 이름 검색" autocomplete="off" aria-label="명소·동 이름 검색"><span class="search-shortcut">검색</span></label></div>
-      <div id="spot-region-row" class="spot-region-row" role="group" aria-label="지역 고르기"></div>
+      <header class="app-topbar"><a class="app-brand" href="#/" aria-label="그 자리, 그 계절 첫 화면"><img class="brand-logo" src="logo-mark.png" alt="" aria-hidden="true"><span class="app-brand-text"><span class="app-brand-name">명소</span><span id="spots-count-line" class="app-brand-sub">KOREA · SPOTS</span></span></a><div class="app-topbar-actions"><button class="topbar-icon-button" type="button" data-open-drawer aria-label="메뉴 열기" aria-controls="app-drawer" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button></div></header><div class="screen-topbar spots-search-row"><button id="btn-list-back" class="back-button" type="button" aria-label="첫 화면으로 돌아가기" hidden>‹</button><label class="screen-search-box" for="spot-search-input"><span class="search-icon" aria-hidden="true"></span><input id="spot-search-input" type="search" placeholder="명소·동 이름 검색" autocomplete="off" aria-label="명소·동 이름 검색"><span class="search-shortcut">검색</span></label><button id="btn-open-filter" class="spot-filter-button" type="button" aria-haspopup="dialog" aria-controls="filter-sheet"><span class="ui-icon-slot" data-icon="filter" aria-hidden="true"></span><span id="spot-filter-label">필터</span></button></div>
       <div class="spot-season-row" role="group" aria-label="계절 사진으로 보기"><button class="spot-season-chip" type="button" data-list-season="all" aria-pressed="true">전체</button><button class="spot-season-chip season-chip-spring" type="button" data-list-season="spring" aria-pressed="false"><span class="season-chip-dot" aria-hidden="true"></span>봄</button><button class="spot-season-chip season-chip-summer" type="button" data-list-season="summer" aria-pressed="false"><span class="season-chip-dot" aria-hidden="true"></span>여름</button><button class="spot-season-chip season-chip-autumn" type="button" data-list-season="autumn" aria-pressed="false"><span class="season-chip-dot" aria-hidden="true"></span>가을</button><button class="spot-season-chip season-chip-winter" type="button" data-list-season="winter" aria-pressed="false"><span class="season-chip-dot" aria-hidden="true"></span>겨울</button></div>
-      <div class="spot-sort-row" role="group" aria-label="명소 정렬"><button class="spot-sort-button" data-spot-sort="nearest" type="button" aria-pressed="false">내 주변 가까운 순</button><button class="spot-sort-button" data-spot-sort="name" type="button" aria-pressed="true">이름 순</button></div><div id="spot-list" class="spot-list" aria-live="polite"></div>
+      <div id="spot-list" class="spot-list" aria-live="polite"></div>
     </section>
 
     <!-- 명소 상세 화면: 기존 정보, 지도, 지점, 계절별 사진, 현장 등록 유지 -->
@@ -81,12 +74,12 @@
     <section id="me-screen" class="screen me-screen" aria-label="내 정보" hidden>
       <header class="app-topbar app-topbar-plain"><h1 class="app-topbar-title">내 정보</h1><div class="app-topbar-actions"><button class="topbar-icon-button" type="button" data-open-drawer aria-label="메뉴 열기" aria-controls="app-drawer" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button></div></header>
       <div class="me-body">
-        <div class="me-card"><svg class="brand-logo brand-logo-lg" viewBox="0 0 30 36" aria-hidden="true"><path class="brand-logo-frame" d="M2 35V15A13 13 0 0 1 28 15V35Z"></path><path class="brand-logo-sky" d="M5 33V15.5A10 10 0 0 1 25 15.5V33Z"></path><circle class="brand-logo-sun" cx="15" cy="21" r="3.6"></circle><path class="brand-logo-hill" d="M5 26Q11 22.5 16 25T25 24.5V33H5Z"></path></svg><div id="home-auth-status" class="me-auth"><p class="me-auth-hello"><span id="home-auth-name" hidden></span><span class="home-auth-login-hint">사진을 올리려면 로그인해 주세요</span></p><button id="home-auth-login" type="button" class="me-primary-button">로그인</button><span id="home-auth-separator" aria-hidden="true" hidden></span><button type="button" class="me-text-button" data-auth-sign-out hidden>로그아웃</button></div></div>
+        <div class="me-card"><img class="brand-logo brand-logo-lg" src="logo-mark.png" alt="" aria-hidden="true"><div id="home-auth-status" class="me-auth"><p class="me-auth-hello"><span id="home-auth-name" hidden></span><span class="home-auth-login-hint">사진을 올리려면 로그인해 주세요</span></p><button id="home-auth-login" type="button" class="me-primary-button">로그인</button><span id="home-auth-separator" aria-hidden="true" hidden></span><button type="button" class="me-text-button" data-auth-sign-out hidden>로그아웃</button></div></div>
         <nav class="me-menu" aria-label="내 기록">
-          <button id="btn-open-my-photos" class="me-menu-item" type="button" hidden><img src="my-photos-icon.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22"><span>내가 올린 사진</span><span class="me-menu-hint">확인하고 지울 수 있어요</span></button>
-          <a class="me-menu-item" href="#/local"><img src="icon-pin.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22"><span>우리 동네 기록</span><span class="me-menu-hint">전국 동네 사진</span></a>
-          <button class="me-menu-item" type="button" data-info="guide"><img src="icon-memo.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22"><span>사용법</span></button>
-          <button class="me-menu-item" type="button" data-info="about"><img src="icon-compass.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22"><span>앱 정보</span></button>
+          <button id="btn-open-my-photos" class="me-menu-item" type="button" hidden><span class="ui-icon-slot" data-icon="my-photos" aria-hidden="true"></span><span>내가 올린 사진</span><span class="me-menu-hint">확인하고 지울 수 있어요</span></button>
+          <a class="me-menu-item" href="#/local"><span class="ui-icon-slot" data-icon="local" aria-hidden="true"></span><span>우리 동네 기록</span><span class="me-menu-hint">전국 동네 사진</span></a>
+          <button class="me-menu-item" type="button" data-info="guide"><span class="ui-icon-slot" data-icon="guide" aria-hidden="true"></span><span>사용법</span></button>
+          <button class="me-menu-item" type="button" data-info="about"><span class="ui-icon-slot" data-icon="about" aria-hidden="true"></span><span>앱 정보</span></button>
         </nav>
       </div>
     </section>
@@ -101,13 +94,13 @@
     <div id="app-drawer" class="modal-overlay app-drawer">
       <aside class="app-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="app-drawer-title" tabindex="-1">
         <button class="btn-close-modal app-drawer-close" type="button" data-close-drawer aria-label="메뉴 닫기">×</button>
-        <div class="app-drawer-brand"><svg class="brand-logo brand-logo-lg" viewBox="0 0 30 36" aria-hidden="true"><path class="brand-logo-frame" d="M2 35V15A13 13 0 0 1 28 15V35Z"></path><path class="brand-logo-sky" d="M5 33V15.5A10 10 0 0 1 25 15.5V33Z"></path><circle class="brand-logo-sun" cx="15" cy="21" r="3.6"></circle><path class="brand-logo-hill" d="M5 26Q11 22.5 16 25T25 24.5V33H5Z"></path></svg><p id="app-drawer-title" class="app-drawer-name">그 자리, 그 계절</p></div>
+        <div class="app-drawer-brand"><img class="brand-logo brand-logo-lg" src="logo-mark.png" alt="" aria-hidden="true"><p id="app-drawer-title" class="app-drawer-name">그 자리, 그 계절</p></div>
         <nav class="app-drawer-menu" aria-label="메뉴">
-          <a class="drawer-item" href="#/local"><img src="icon-pin.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22">우리 동네 기록</a>
-          <a class="drawer-item" href="#/my-photos" data-needs-login><img src="my-photos-icon.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22">내가 올린 사진</a>
-          <button class="drawer-item" type="button" data-info="guide"><img src="icon-memo.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22">사용법</button>
-          <button class="drawer-item" type="button" data-info="notice"><img src="icon-sunrise.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22">공지사항</button>
-          <button class="drawer-item" type="button" data-info="about"><img src="icon-compass.png" alt="" aria-hidden="true" class="ui-icon ui-icon-22">앱 정보</button>
+          <a class="drawer-item" href="#/local"><span class="ui-icon-slot" data-icon="local" aria-hidden="true"></span>우리 동네 기록</a>
+          <a class="drawer-item" href="#/my-photos" data-needs-login><span class="ui-icon-slot" data-icon="my-photos" aria-hidden="true"></span>내가 올린 사진</a>
+          <button class="drawer-item" type="button" data-info="guide"><span class="ui-icon-slot" data-icon="guide" aria-hidden="true"></span>사용법</button>
+          <button class="drawer-item" type="button" data-info="notice"><span class="ui-icon-slot" data-icon="notice" aria-hidden="true"></span>공지사항</button>
+          <button class="drawer-item" type="button" data-info="about"><span class="ui-icon-slot" data-icon="about" aria-hidden="true"></span>앱 정보</button>
         </nav>
         <div class="app-drawer-account"><button class="drawer-item" type="button" data-drawer-login><svg viewBox="0 0 24 24" aria-hidden="true" class="drawer-svg"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg><span data-drawer-login-label>로그인</span></button></div>
         <p class="app-drawer-foot">같은 자리,<br>다른 계절</p>
@@ -119,6 +112,9 @@
 
     <!-- + 사진 올리기: 명소 고르기 -->
     <div id="add-sheet" class="modal-overlay add-sheet" role="dialog" aria-modal="true" aria-labelledby="add-sheet-title"><div class="modal-sheet"><div class="sheet-header"><div><h3 id="add-sheet-title" class="sheet-title">어디서 찍은 사진인가요?</h3><p class="add-sheet-sub">명소를 고르면 위치 확인 후 올릴 수 있어요</p></div><button class="btn-close-modal" type="button" data-close-add aria-label="닫기">×</button></div><button id="add-sheet-locate" class="add-sheet-locate" type="button">내 위치로 가까운 명소 찾기</button><div id="add-sheet-list" class="add-sheet-list"></div><button id="add-sheet-local" class="add-sheet-local" type="button"><span>명소가 아닌 곳이에요</span><span class="add-sheet-local-sub">우리 동네 기록에 올리기</span></button></div></div>
+
+    <!-- 명소 필터: 지역·정렬 -->
+    <div id="filter-sheet" class="modal-overlay filter-sheet" role="dialog" aria-modal="true" aria-labelledby="filter-sheet-title"><div class="modal-sheet"><div class="sheet-header"><h3 id="filter-sheet-title" class="sheet-title">필터</h3><button class="btn-close-modal" type="button" data-close-filter aria-label="닫기">×</button></div><p class="filter-sheet-label">정렬</p><div class="spot-sort-row" role="group" aria-label="명소 정렬"><button class="spot-sort-button" data-spot-sort="nearest" type="button" aria-pressed="false">내 주변 가까운 순</button><button class="spot-sort-button" data-spot-sort="name" type="button" aria-pressed="true">이름 순</button></div><p class="filter-sheet-label">지역</p><div id="spot-region-row" class="spot-region-row" role="group" aria-label="지역 고르기"></div><button class="me-primary-button filter-sheet-done" type="button" data-close-filter>결과 보기</button></div></div>
 
     <!-- 아래 탭 막대 -->
     <nav id="app-tabbar" class="app-tabbar" aria-label="주요 메뉴">

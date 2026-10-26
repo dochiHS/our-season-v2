@@ -1,0 +1,13 @@
+/* 사진 없는 칸: 일반 앱처럼 옅은 회색 바탕 + 가운데 사진 아이콘 (design.css 다음에 불러옴) */
+.photo-placeholder,
+.spots-screen .spot-list-card .spot-list-thumbnail.photo-placeholder,
+.browse-card-thumb.is-empty.photo-placeholder,
+.home-hero-media.is-empty.photo-placeholder {
+  display: grid; place-items: center;
+  background: #EEEDEA !important;
+  border: 0 !important;
+}
+.photo-placeholder::before, .photo-placeholder::after { display: none !important; content: none !important; }
+.photo-placeholder-icon { width: 30px; height: 30px; fill: none; stroke: #B5B2AC; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.home-hero-media.photo-placeholder .photo-placeholder-icon { width: 48px; height: 48px; }
+.home-hero:has(.home-hero-media.photo-placeholder) .home-hero-shade { background: linear-gradient(180deg, transparent 40%, rgb(20 20 20 / 55%) 100%) !important; }

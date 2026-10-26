@@ -10,6 +10,7 @@
   const drawer = document.getElementById('app-drawer');
   const infoSheet = document.getElementById('info-sheet');
   const addSheet = document.getElementById('add-sheet');
+  const filterSheet = document.getElementById('filter-sheet');
   const heroState = { spotId: null, season: null };
   let loggedIn = false;
 
@@ -81,7 +82,7 @@
       link.appendChild(image);
     } else {
       link.classList.add('is-empty');
-      link.innerHTML = '<svg class="home-hero-empty-art" viewBox="0 0 300 300" aria-hidden="true"><path class="hero-empty-hill-back" d="M0 196 Q60 168 122 188 T236 180 T300 188 V300 H0Z"></path><path class="hero-empty-hill-front" d="M0 226 Q80 196 160 220 T300 212 V300 H0Z"></path><circle class="hero-empty-sun" cx="150" cy="150" r="28"></circle></svg>';
+      link.classList.add('photo-placeholder'); link.innerHTML = '<svg class="photo-placeholder-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2.5"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M4 17l4.8-4.6 3.4 3.1 2.6-2.4L20 17.5"></path></svg>';
     }
     hero.appendChild(link);
 
@@ -131,7 +132,7 @@
       const thumb = document.createElement('span'); thumb.className = 'browse-card-thumb';
       const found = anyPhotoFor(spot.id, nowSeason);
       if (found) { const image = document.createElement('img'); image.src = found.photo.thumb || found.photo.src; image.alt = ''; image.loading = 'lazy'; thumb.appendChild(image); }
-      else { thumb.classList.add('is-empty'); thumb.innerHTML = '<span>사진을 기다려요</span>'; }
+      else { thumb.classList.add('is-empty', 'photo-placeholder'); thumb.innerHTML = '<svg class="photo-placeholder-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2.5"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M4 17l4.8-4.6 3.4 3.1 2.6-2.4L20 17.5"></path></svg>'; thumb.setAttribute('aria-label', '사진 없음'); }
       const name = document.createElement('span'); name.className = 'browse-card-name'; name.textContent = spot.name;
       const place = document.createElement('span'); place.className = 'browse-card-place'; place.textContent = state.userCoords && spot.distanceText ? `${spot.sido} · ${spot.distanceText}` : `${spot.sido} ${district(spot)}`;
       card.append(thumb, name, place);
@@ -252,13 +253,15 @@
   }
 
   function init() {
-    [drawer, infoSheet, addSheet].forEach(overlay => overlay && overlay.setAttribute('inert', ''));
+    [drawer, infoSheet, addSheet, filterSheet].forEach(overlay => overlay && overlay.setAttribute('inert', ''));
     document.addEventListener('click', event => {
       const target = event.target;
       const openDrawerButton = target.closest('[data-open-drawer]'); if (openDrawerButton) { openDrawer(openDrawerButton); return; }
       if (target.closest('[data-close-drawer]') || target === drawer) { closeDrawer(); return; }
       if (target.closest('[data-close-info]') || target === infoSheet) { setOpen(infoSheet, false); return; }
       if (target.closest('[data-close-add]') || target === addSheet) { setOpen(addSheet, false); return; }
+      if (target.closest('#btn-open-filter')) { setOpen(filterSheet, true); return; }
+      if (target.closest('[data-close-filter]') || target === filterSheet) { setOpen(filterSheet, false); return; }
       if (target.closest('[data-open-add]')) { openAdd(); return; }
       const info = target.closest('[data-info]'); if (info) { event.preventDefault(); const key = info.dataset.info; if (drawer.contains(info)) closeThen(drawer, () => openInfo(key)); else openInfo(key); return; }
       const drawerLink = target.closest('.app-drawer a[href^="#/"]');
@@ -280,6 +283,7 @@
       if (drawer.classList.contains('open')) closeDrawer();
       else if (infoSheet.classList.contains('open')) setOpen(infoSheet, false);
       else if (addSheet.classList.contains('open')) setOpen(addSheet, false);
+      else if (filterSheet && filterSheet.classList.contains('open')) setOpen(filterSheet, false);
     });
     const locate = document.getElementById('add-sheet-locate');
     if (locate) locate.addEventListener('click', async () => {

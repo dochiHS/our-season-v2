@@ -75,7 +75,6 @@
       const background = global.getComputedStyle(root).getPropertyValue('--bg-primary').trim();
       if (background) themeMeta.content = background;
     }
-    updateAllIcons(season);
     return season;
   }
 
@@ -92,6 +91,5 @@
       : 'spring';
 
   global.SeasonTheme = Object.freeze({ apply, current });
-  observeIcons();
   apply(initialSeason);
 })(globalThis);

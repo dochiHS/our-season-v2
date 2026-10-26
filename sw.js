@@ -1,12 +1,11 @@
 'use strict';
 
-const CACHE = 'our-season-v2-3';
+const CACHE = 'our-season-v2-5';
 const PRECACHE_FILES = [
   './',
   'index.html',
   'manifest.webmanifest',
   'style.css',
-  'season-theme.css',
   'icons.css',
   'auth.css',
   'pwa.css',
@@ -14,6 +13,7 @@ const PRECACHE_FILES = [
   'point-sheet.css',
   'shell.css',
   'design.css',
+  'empty-state.css',
   'geo-calculator.js',
   'exif-gps-reader.js',
   'photo-heading.js',
@@ -24,6 +24,7 @@ const PRECACHE_FILES = [
   'season-slideshow.js',
   'point-sheet.js',
   'shell.js',
+  'logo-mark.png',
   'image-compressor.js',
   'upload-validator.js',
   'invite.js',
