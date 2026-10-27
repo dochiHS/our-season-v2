@@ -25,7 +25,7 @@
     },
     about: {
       title: '앱 정보',
-      html: '<p class="info-lead">그 자리, 그 계절은 전국 출사 명소에서 같은 자리의 사계절 사진을 모아 보는 앱입니다. 명소 정보는 한국관광공사 관광정보를 바탕으로 정리했습니다.</p><dl class="info-list"><div><dt>사진</dt><dd>이용자가 현장에서 올린 사진과 한국관광공사 사진(ⓒ한국관광콘텐츠랩, 공공누리 제1유형)</dd></div><div><dt>지도</dt><dd>© OpenStreetMap 기여자, 길찾기는 네이버 지도</dd></div><div><dt>글꼴</dt><dd>SUIT</dd></div></dl>'
+      html: '<p class="info-lead">그 자리, 그 계절</p><p>같은 자리에서 찍은 사계절 사진을 모아 보고, 직접 찍은 사진을 남기는 출사 앱입니다.</p><p class="info-credit">사진·관광정보 ⓒ한국관광공사 · 지도 © OpenStreetMap</p>'
     }
   };
 

@@ -11,3 +11,4 @@ img.brand-logo { object-fit: contain; }
 .spots-screen .spot-list-card-arrow { display: none; }
 /* 첫 화면 계절 칩은 사진(명소로 이동 버튼) 위에서 직접 눌려야 함 */
 .home-hero-chips, .home-hero-chips .season-chip { pointer-events: auto; position: relative; z-index: 3; }
+.info-credit { margin-top: 18px; color: var(--text-muted); font-size: 11px; }
