@@ -7,12 +7,15 @@
   <title>관리자 승인</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2.0.5/fonts/static/woff2/SUIT.css">
   <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="design.css">
+  <link rel="stylesheet" href="admin-v2.css">
 </head>
 <body>
   <main class="admin-shell">
     <section id="login-view" class="login-view" aria-labelledby="login-title">
       <div class="page-heading">
-        <p class="eyebrow">OUR PLACE, OUR SEASON</p>
+        <img class="admin-logo" src="logo-mark.png" alt="" aria-hidden="true">
+        <p class="eyebrow">KOREA · PHOTO ARCHIVE</p>
         <h1 id="login-title">관리자 로그인</h1>
       </div>
       <form id="login-form" class="login-form">
@@ -27,9 +30,12 @@
 
     <section id="admin-view" class="admin-view" aria-labelledby="admin-title" hidden>
       <header class="admin-header">
-        <div>
-          <p class="eyebrow">OUR PLACE, OUR SEASON</p>
-          <h1 id="admin-title">사진 승인</h1>
+        <div class="admin-brand">
+          <img class="admin-logo admin-logo-sm" src="logo-mark.png" alt="" aria-hidden="true">
+          <div>
+            <p class="eyebrow">그 자리, 그 계절 · 관리자</p>
+            <h1 id="admin-title">사진 승인</h1>
+          </div>
         </div>
         <button id="logout-button" class="button button-secondary" type="button">로그아웃</button>
       </header>

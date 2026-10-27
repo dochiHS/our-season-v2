@@ -1,0 +1,64 @@
+/* 관리자 화면: 앱 새 디자인(design.css 색)에 맞춘 모양. admin.css 다음에 불러옵니다. */
+body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-ui); }
+.admin-shell { width: min(100%, 980px); margin: 0 auto; padding: 0 16px 48px; }
+
+/* 로그인 */
+.login-view { max-width: 400px; margin: 9vh auto 0; padding: 32px 24px 28px; border: 1px solid var(--bg-border); border-radius: 24px; background: var(--bg-surface); box-shadow: var(--shadow-card); }
+.page-heading { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 24px; text-align: center; }
+.admin-logo { width: 56px; height: 66px; object-fit: contain; margin-bottom: 8px; }
+.eyebrow { margin: 0; color: var(--text-muted); font-size: 10px; font-weight: 700; letter-spacing: .2em; }
+.page-heading h1, .admin-header h1 { margin: 2px 0 0; font-size: 22px; font-weight: 850; letter-spacing: -.045em; color: var(--text-primary); }
+.login-form { display: flex; flex-direction: column; gap: 0; }
+.login-form label { margin: 0 0 7px; color: var(--text-primary); font-size: 13px; font-weight: 750; }
+.login-form input { width: 100%; min-height: 48px; margin: 0 0 14px; padding: 0 14px; border: 1px solid var(--bg-border); border-radius: 12px; background: var(--bg-surface); color: var(--text-primary); font-size: 15px; box-shadow: none; }
+.login-form input:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--focus-ring); }
+
+/* 버튼 */
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 18px; border-radius: 999px; font-size: 14px; font-weight: 800; box-shadow: none; cursor: pointer; }
+.button-primary { border: 1px solid var(--color-primary-dark); background: var(--color-primary-dark); color: #fff; }
+.button-primary:active { transform: scale(.98); }
+.button-secondary { border: 1px solid var(--bg-border); background: var(--bg-surface); color: var(--text-secondary); }
+.button-danger { border: 1px solid #e3b7b0; background: var(--bg-surface); color: #a3392c; }
+.login-form .button { width: 100%; margin-top: 6px; min-height: 50px; }
+
+/* 안내 문구 */
+.message { margin: 14px 0 0; padding: 11px 14px; border: 0; border-radius: 12px; background: var(--bg-subtle); color: var(--text-secondary); font-size: 13px; }
+.message.is-error { background: #fbeceb; color: #a3392c; }
+.message.is-success { background: #eaf3ec; color: #2f6a45; }
+
+/* 머리 */
+.admin-header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 -16px; padding: 12px 16px; border-bottom: 1px solid var(--bg-border); background: var(--bg-surface); }
+.admin-brand { display: flex; align-items: center; gap: 10px; }
+.admin-logo-sm { width: 34px; height: 40px; margin: 0; }
+.admin-header .eyebrow { letter-spacing: .04em; font-size: 11px; }
+.admin-header h1 { font-size: 18px; }
+
+/* 대기·승인됨 탭과 도구 줄 */
+.admin-queue-tabs { display: inline-grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 18px 0 0; padding: 4px; border: 0; border-radius: 999px; background: var(--bg-subtle); }
+.admin-queue-tab { min-height: 38px; min-width: 96px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 700; box-shadow: none; }
+.admin-queue-tab.is-active { background: var(--bg-surface); color: var(--text-primary); font-weight: 850; box-shadow: 0 1px 4px rgb(48 36 23 / 10%); }
+.queue-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 16px 0 12px; padding: 0; border: 0; background: none; }
+.queue-toolbar h2 { margin: 0; font-size: 17px; font-weight: 850; letter-spacing: -.04em; }
+.queue-toolbar .button { min-height: 38px; padding: 0 14px; font-size: 13px; }
+
+/* 사진 카드: 휴대폰 1열, 넓은 화면 2~3열 */
+.pending-list { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 640px) { .pending-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 940px) { .pending-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.photo-card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--bg-border); border-radius: 18px; background: var(--bg-surface); box-shadow: var(--shadow-card); }
+.photo-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border: 0; border-radius: 0; background: #EEEDEA; }
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+.photo-unavailable { display: grid; place-items: center; height: 100%; color: var(--text-muted); font-size: 13px; background: #EEEDEA; }
+.photo-card-content { display: flex; flex-direction: column; gap: 6px; flex: 1; padding: 14px 14px 4px; }
+.photo-kind { margin: 0; color: var(--text-primary); font-size: 15px; font-weight: 850; letter-spacing: -.03em; }
+.photo-location-unverified { margin: 0; padding: 6px 10px; border-radius: 10px; background: #fbf1e2; color: #8a5a16; font-size: 12px; font-weight: 700; }
+.photo-location-status { color: var(--text-muted); font-size: 11px; }
+.photo-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.photo-tag { padding: 3px 9px; border: 0; border-radius: 999px; background: var(--bg-subtle); color: var(--text-secondary); font-size: 11px; font-weight: 700; }
+.photo-memo { margin: 2px 0 0; padding: 0; border: 0; background: none; color: var(--text-primary); font-size: 14px; line-height: 1.5; }
+.photo-byline, .photo-uploaded-at { margin: 0; color: var(--text-secondary); font-size: 12px; }
+.photo-uploaded-at { color: var(--text-muted); }
+.card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 14px 14px; border: 0; }
+.card-actions.is-single-action { grid-template-columns: 1fr; }
+.card-actions .button { width: 100%; margin: 0; }
+.empty-state { grid-column: 1 / -1; margin: 0; padding: 48px 16px; border: 1px dashed var(--bg-border); border-radius: 18px; background: var(--bg-surface); color: var(--text-muted); font-size: 14px; text-align: center; }
