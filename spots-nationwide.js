@@ -485,11 +485,11 @@
       "points": [
         {
           "id": "apsan-main",
-          "name": "대표 위치",
-          "lat": 35.82897,
-          "lng": 128.58903,
+          "name": "앞산전망대",
+          "lat": 35.82479,
+          "lng": 128.57945,
           "radiusMeters": 500,
-          "description": "앞산전망대 대표 촬영 지점"
+          "description": "앞산전망대 촬영 지점"
         }
       ]
     },
@@ -612,11 +612,19 @@
       "points": [
         {
           "id": "seongmodo-main",
-          "name": "대표 위치",
+          "name": "석모도 일대",
           "lat": 37.69335,
           "lng": 126.36708,
-          "radiusMeters": 1500,
+          "radiusMeters": 5000,
           "description": "강화 석모도 대표 촬영 지점"
+        },
+        {
+          "id": "seongmodo-bomunsa",
+          "name": "보문사",
+          "lat": 37.68874,
+          "lng": 126.32148,
+          "radiusMeters": 500,
+          "description": "보문사 촬영 지점"
         }
       ]
     },
@@ -987,7 +995,7 @@
           "name": "대표 위치",
           "lat": 36.23136,
           "lng": 127.4711,
-          "radiusMeters": 600,
+          "radiusMeters": 800,
           "description": "상소동 산림욕장 대표 촬영 지점"
         }
       ]
@@ -1294,11 +1302,19 @@
       "points": [
         {
           "id": "suwon-hwaseong-main",
-          "name": "대표 위치",
+          "name": "팔달문 쪽 성곽길",
           "lat": 37.27735,
           "lng": 127.01726,
           "radiusMeters": 1000,
           "description": "수원화성 대표 촬영 지점"
+        },
+        {
+          "id": "suwon-hwaseong-banghwasuryujeong",
+          "name": "방화수류정",
+          "lat": 37.28754,
+          "lng": 127.01805,
+          "radiusMeters": 500,
+          "description": "방화수류정 촬영 지점"
         }
       ]
     },
@@ -1740,11 +1756,19 @@
       "points": [
         {
           "id": "chungju-lake-main",
-          "name": "대표 위치",
+          "name": "충주호 일대",
           "lat": 36.95815,
           "lng": 128.04002,
           "radiusMeters": 1500,
           "description": "충주호 대표 촬영 지점"
+        },
+        {
+          "id": "chungju-lake-akeobong",
+          "name": "악어봉 전망",
+          "lat": 36.91796,
+          "lng": 128.04448,
+          "radiusMeters": 500,
+          "description": "악어봉 전망 촬영 지점"
         }
       ]
     },
@@ -2028,11 +2052,11 @@
       "points": [
         {
           "id": "jeonju-hanok-main",
-          "name": "대표 위치",
-          "lat": 35.81417,
-          "lng": 127.15002,
-          "radiusMeters": 600,
-          "description": "전주 한옥마을 대표 촬영 지점"
+          "name": "전주 한옥마을",
+          "lat": 35.81754,
+          "lng": 127.15205,
+          "radiusMeters": 700,
+          "description": "전주 한옥마을 촬영 지점"
         }
       ]
     },
@@ -2092,11 +2116,19 @@
       "points": [
         {
           "id": "seonyudo-main",
-          "name": "대표 위치",
+          "name": "선유도 해변",
           "lat": 35.8102,
           "lng": 126.41241,
           "radiusMeters": 1500,
           "description": "군산 선유도 대표 촬영 지점"
+        },
+        {
+          "id": "seonyudo-mangjubong",
+          "name": "망주봉",
+          "lat": 35.82166,
+          "lng": 126.41617,
+          "radiusMeters": 700,
+          "description": "망주봉 촬영 지점"
         }
       ]
     },
@@ -2125,11 +2157,11 @@
       "points": [
         {
           "id": "okjeongho-main",
-          "name": "대표 위치",
-          "lat": 35.63691,
-          "lng": 127.13602,
+          "name": "붕어섬 생태공원",
+          "lat": 35.63181,
+          "lng": 127.14652,
           "radiusMeters": 1000,
-          "description": "임실 옥정호 붕어섬 대표 촬영 지점"
+          "description": "붕어섬 생태공원 촬영 지점"
         }
       ]
     },
@@ -2705,11 +2737,11 @@
       "points": [
         {
           "id": "hwangmaesan-main",
-          "name": "대표 위치",
-          "lat": 35.46912,
-          "lng": 128.00154,
+          "name": "황매산 철쭉군락지",
+          "lat": 35.47956,
+          "lng": 127.98611,
           "radiusMeters": 1500,
-          "description": "합천 황매산 대표 촬영 지점"
+          "description": "황매산 철쭉군락지 촬영 지점"
         }
       ]
     },
@@ -3080,11 +3112,11 @@
       "points": [
         {
           "id": "saryeoni-main",
-          "name": "대표 위치",
-          "lat": 33.39894,
-          "lng": 126.67927,
+          "name": "사려니숲길",
+          "lat": 33.42731,
+          "lng": 126.66167,
           "radiusMeters": 1500,
-          "description": "사려니숲길 대표 촬영 지점"
+          "description": "사려니숲길 촬영 지점"
         }
       ]
     },
