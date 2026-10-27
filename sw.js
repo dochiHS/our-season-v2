@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'our-season-v2-10';
+const CACHE = 'our-season-v2-11';
 const PRECACHE_FILES = [
   './',
   'index.html',
@@ -23,6 +23,7 @@ const PRECACHE_FILES = [
   'spots-nationwide.js',
   'spots-data.js',
   'season-theme.js',
+  'reference-photos-nationwide.js',
   'reference-photos.js',
   'season-slideshow.js',
   'point-sheet.js',

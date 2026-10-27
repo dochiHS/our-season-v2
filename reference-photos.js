@@ -17,11 +17,12 @@
     { spotId: 'munui-daecheongho', season: 'summer', id: 'cFx7qn', month: '2026.06', by: '손정원', thumb: BASE + '25/4118125_image3_1.jpg', image: BASE + '25/4118125_image2_1.jpg' },
     { spotId: 'munui-daecheongho', season: 'summer', id: '3yNa2w', month: '2026.06', by: '손정원', thumb: BASE + '72/4118172_image3_1.jpg', image: BASE + '72/4118172_image2_1.jpg' }
   ];
+  const ALL = PHOTOS.concat(Array.isArray(global.NATION_REFERENCE_PHOTOS) ? global.NATION_REFERENCE_PHOTOS : []);
   function getReferencePhotos(spotId, season) {
-    return PHOTOS.filter(p => p.spotId === spotId && p.season === season);
+    return ALL.filter(p => p.spotId === spotId && p.season === season);
   }
   function creditOf(photo) {
-    return 'ⓒ한국관광콘텐츠랩-' + photo.by;
+    return photo.credit || ('ⓒ한국관광콘텐츠랩-' + photo.by);
   }
   global.ReferencePhotos = Object.freeze({ getReferencePhotos, creditOf });
 })(window);
