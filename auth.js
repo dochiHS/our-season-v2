@@ -21,15 +21,29 @@
     global.dispatchEvent(authEvent);
   }
 
+  const RETURN_KEY = 'our-season-oauth-return';
+  function restoreAfterOAuth(event) {
+    if (event !== 'SIGNED_IN') return;
+    let back = null;
+    try { back = global.sessionStorage.getItem(RETURN_KEY); global.sessionStorage.removeItem(RETURN_KEY); } catch (error) { back = null; }
+    const params = new URLSearchParams(global.location.search);
+    if (params.has('code') || params.has('error')) {
+      params.delete('code'); params.delete('error'); params.delete('error_description'); params.delete('error_code');
+      const query = params.toString();
+      global.history.replaceState(global.history.state, '', `${global.location.pathname}${query ? `?${query}` : ''}${back || global.location.hash || '#/'}`);
+      if (back && back !== '#/') global.dispatchEvent(new HashChangeEvent('hashchange'));
+    }
+  }
+
   function getClient() {
     if (client) return client;
     const config = global.SUPABASE_CONFIG;
     if (!config || !config.SUPABASE_URL || !config.SUPABASE_ANON_KEY || !sdk || typeof sdk.createClient !== 'function') return null;
     client = sdk.createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY, {
-      auth: { storageKey: AUTH_STORAGE_KEY, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      auth: { storageKey: AUTH_STORAGE_KEY, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' }
     });
     if (client.auth && typeof client.auth.onAuthStateChange === 'function') {
-      client.auth.onAuthStateChange((event, session) => notifyAuthChange(event, session));
+      client.auth.onAuthStateChange((event, session) => { notifyAuthChange(event, session); restoreAfterOAuth(event); });
     }
     return client;
   }
@@ -97,6 +111,12 @@
           <p class="auth-status" role="status" aria-live="polite" hidden></p>
           <button class="btn-submit-upload auth-submit" type="submit">로그인</button>
         </form>
+        <div class="auth-social" aria-label="간편 로그인" hidden>
+          <p class="auth-social-label"><span>또는 간편하게</span></p>
+          <button class="auth-social-button auth-social-kakao" type="button" data-oauth="kakao" hidden>카카오로 시작하기</button>
+          <button class="auth-social-button auth-social-naver" type="button" data-oauth="custom:naver" hidden>네이버로 시작하기</button>
+          <button class="auth-social-button auth-social-google" type="button" data-oauth="google" hidden>구글로 시작하기</button>
+        </div>
       </div>`;
     document.body.appendChild(authModal);
     statusNode = authModal.querySelector('.auth-status');
@@ -125,6 +145,34 @@
     }
 
     tabs.forEach(tab => tab.addEventListener('click', () => setMode(tab.dataset.authMode)));
+    // Supabase에서 켜 둔 간편 로그인만 버튼을 보여 줌 (꺼진 방법을 누르면 오류 화면으로 넘어가므로)
+    (async () => {
+      const config = global.SUPABASE_CONFIG;
+      if (!config) return;
+      try {
+        const response = await global.fetch(`${config.SUPABASE_URL}/auth/v1/settings`, { headers: { apikey: config.SUPABASE_ANON_KEY } });
+        if (!response.ok) return;
+        const external = (await response.json()).external || {};
+        let any = false;
+        authModal.querySelectorAll('[data-oauth]').forEach(button => {
+          const id = button.dataset.oauth, short = id.replace(/^custom:/, '');
+          const on = Boolean(external[id] || external[short]);
+          button.hidden = !on; any = any || on;
+        });
+        authModal.querySelector('.auth-social').hidden = !any;
+      } catch (error) { /* 설정을 못 읽으면 이메일 로그인만 */ }
+    })();
+    authModal.querySelectorAll('[data-oauth]').forEach(button => button.addEventListener('click', async () => {
+      const db = getClient();
+      if (!db || !db.auth) { setStatus('로그인 기능을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.', true); return; }
+      try { global.sessionStorage.setItem(RETURN_KEY, global.location.hash || '#/'); } catch (error) { /* 저장 못 하면 첫 화면으로 */ }
+      const redirectTo = `${global.location.origin}${global.location.pathname}`;
+      const result = await db.auth.signInWithOAuth({ provider: button.dataset.oauth, options: { redirectTo } });
+      if (result && result.error) {
+        const message = String(result.error.message || '');
+        setStatus(/not enabled|unsupported|provider/i.test(message) ? '아직 준비 중인 로그인 방법이에요. 이메일로 로그인해 주세요.' : '로그인 창을 열지 못했어요. 잠시 후 다시 시도해 주세요.', true);
+      }
+    }));
     authModal.querySelector('.auth-close').addEventListener('click', () => closeModal(null));
     authModal.addEventListener('click', event => { if (event.target === authModal) closeModal(null); });
     form.addEventListener('submit', async event => {
@@ -191,8 +239,9 @@
   }
 
   function getNickname(user) {
-    const value = user && user.user_metadata && user.user_metadata.nickname;
-    return typeof value === 'string' ? value.trim() : '';
+    const meta = user && user.user_metadata || {};
+    const value = [meta.nickname, meta.name, meta.full_name, meta.user_name, meta.preferred_username].find(item => typeof item === 'string' && item.trim());
+    return value ? Array.from(value.trim()).slice(0, 20).join('') : '';
   }
 
   async function setNickname(nickname) {

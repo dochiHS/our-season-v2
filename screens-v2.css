@@ -114,3 +114,12 @@
 .screen-search-box input:focus,
 .screen-search-box input:focus-visible { outline: none !important; box-shadow: none !important; border: 0 !important; background: transparent !important; }
 .screen-search-box:focus-within { border-color: var(--color-primary) !important; }
+
+/* 간편 로그인 버튼 */
+.auth-social { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+.auth-social-label { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; color: var(--text-muted); font-size: 12px; }
+.auth-social-label::before, .auth-social-label::after { content: ""; flex: 1; height: 1px; background: var(--bg-border); }
+.auth-social-button { width: 100%; min-height: 48px; border-radius: 999px; font-size: 14px; font-weight: 800; cursor: pointer; }
+.auth-social-kakao { border: 0; background: #FEE500; color: #191919; }
+.auth-social-naver { border: 0; background: #03C75A; color: #fff; }
+.auth-social-google { border: 1px solid var(--bg-border); background: #fff; color: #1f1f1f; }
