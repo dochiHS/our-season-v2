@@ -1837,6 +1837,40 @@
       ]
     },
     {
+      "id": "mungwang-reservoir",
+      "name": "괴산 문광저수지",
+      "sido": "충북",
+      "address": "괴산군 문광면",
+      "fullAddress": "충청북도 괴산군 문광면 양곡리 16",
+      "areaKeywords": [
+        "충북",
+        "충청북도",
+        "괴산군",
+        "괴산",
+        "문광면",
+        "양곡리",
+        "문광저수지",
+        "은행나무길"
+      ],
+      "description": "저수지 둑을 따라 은행나무가 늘어서고 새벽 물안개가 피는 곳",
+      "operatingHours": "상시 개방",
+      "parking": "무료 공영주차장 (제3주차장이 은행나무길과 가까움)",
+      "safetyNotice": "가을 주말은 주차장이 일찍 참",
+      "source": {
+        "web": "mom-mom.net 장소 정보"
+      },
+      "points": [
+        {
+          "id": "mungwang-reservoir-main",
+          "name": "은행나무길",
+          "lat": 36.76758,
+          "lng": 127.74877,
+          "radiusMeters": 700,
+          "description": "저수지 둑 은행나무길 촬영 지점"
+        }
+      ]
+    },
+    {
       "id": "oeam-village",
       "name": "아산 외암마을",
       "sido": "충남",
