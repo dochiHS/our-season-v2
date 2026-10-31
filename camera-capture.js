@@ -416,6 +416,7 @@
       session.retakeButton.hidden = false;
       session.useButton.disabled = true;
       session.saveButton.disabled = false;
+      session.saveButton.textContent = '폰에 저장';
       session.overlay.querySelector('.camera-capture-review').hidden = false;
 
       const token = ++session.captureToken;
@@ -486,15 +487,35 @@
     }
   }
 
+  // 아이폰: 공유 창의 [이미지 저장]으로 사진 앱에 바로 저장. 안드로이드: 다운로드(갤러리 Download 앨범)로 저장.
+  // 같은 사진을 두 번 받지 않도록 저장 후 버튼을 잠근다.
+  function isIOS() {
+    const ua = global.navigator.userAgent || '';
+    return /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && global.navigator.maxTouchPoints > 1);
+  }
+
+  function markSaved(session) {
+    if (session.done || !session.saveButton) return;
+    session.saveButton.disabled = true;
+    session.saveButton.textContent = '저장됨';
+  }
+
   function savePhoto(session) {
-    if (!session.capturedFile || !session.capturedUrl) return;
+    if (!session.capturedFile || !session.capturedUrl || session.saveButton.disabled) return;
+    const file = session.capturedFile;
+    const nav = global.navigator;
+    if (isIOS() && typeof nav.share === 'function' && typeof nav.canShare === 'function' && nav.canShare({ files: [file] })) {
+      nav.share({ files: [file] }).then(function () { markSaved(session); }, function () {});
+      return;
+    }
     const link = document.createElement('a');
     link.href = session.capturedUrl;
-    link.download = session.capturedFile.name;
+    link.download = file.name;
     link.hidden = true;
     document.body.appendChild(link);
     link.click();
     link.remove();
+    markSaved(session);
   }
 
   function finish(session, result, fromPopState) {
