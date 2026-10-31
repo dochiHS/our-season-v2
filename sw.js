@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'our-season-v2-17';
+const CACHE = 'our-season-v2-18';
 const PRECACHE_FILES = [
   './',
   'index.html',

@@ -377,6 +377,22 @@
   function closeUploadModal() { if (elements.uploadModal) elements.uploadModal.classList.remove('open'); }
   function createRandomUuid() { if (global.crypto && typeof global.crypto.randomUUID === 'function') return global.crypto.randomUUID(); if (!global.crypto || typeof global.crypto.getRandomValues !== 'function') throw new Error('안전한 무작위 ID를 만들 수 없습니다. HTTPS 환경에서 다시 시도해 주세요.'); const bytes = new Uint8Array(16); global.crypto.getRandomValues(bytes); bytes[6] = (bytes[6] & 15) | 64; bytes[8] = (bytes[8] & 63) | 128; return Array.from(bytes, (byte, index) => { const value = byte.toString(16).padStart(2, '0'); return [4, 6, 8, 10].includes(index) ? `-${value}` : value; }).join(''); }
   function validateNickname(value) { const nickname = value.trim(), length = Array.from(nickname).length; if (length < 1 || length > 20) throw new Error('닉네임을 1~20자로 입력해 주세요.'); return nickname; }
+  async function verifyRecentPhotoByCurrentLocation(spot, file) {
+    let takenAt = state.selectedTakenAt;
+    if (!takenAt && global.ExifGpsReader) { try { takenAt = await global.ExifGpsReader.extractDateTimeOriginal(file); } catch (error) { takenAt = null; } }
+    const takenTime = takenAt ? new Date(takenAt).getTime() : NaN;
+    const age = Date.now() - takenTime;
+    if (!Number.isFinite(takenTime) || age < -10 * 60 * 1000 || age > 3 * 60 * 60 * 1000) return null;
+    let coords;
+    try { coords = await global.UploadValidator.getCurrentUserPosition(); } catch (error) { return null; }
+    if (!coords) return null;
+    state.userCoords = coords;
+    const accuracy = Number.isFinite(coords.accuracy) ? Math.min(Math.max(coords.accuracy, 0), 100) : 0;
+    const nearest = spot.points.map(point => ({ point, radius: Number(point.radiusMeters) > 0 ? Number(point.radiusMeters) : 500, distance: global.GeoCalculator.getDistanceInMeters(coords.latitude, coords.longitude, point.lat, point.lng) }))
+      .sort((a, b) => a.distance - b.distance)[0];
+    if (!nearest || nearest.distance > nearest.radius + accuracy) return null;
+    return { isValid: true, pointId: nearest.point.id, details: { photoLocation: { takenAt } } };
+  }
   function validateWeatherNote(value) { const note = value.trim(); if (Array.from(note).length > 10) throw new Error('날씨 메모는 10자 이하로 입력해 주세요.'); return note; }
   async function handlePhotoSubmit(event) {
     event.preventDefault(); if (isSubmitting) return;
@@ -428,6 +444,12 @@
         validation = await global.Invite.validatePhotoOnly(file, target);
         const noGps = !validation.isValid && (validation.errorItems || []).some(item => item && item.code === 'PHOTO_GPS_MISSING');
         if (noGps) {
+          // 안드로이드 사진 선택 창은 사생활 보호로 사진 속 GPS를 지운다.
+          // 방금(3시간 안) 찍은 사진이고 지금 현장 반경 안에 있으면, 현재 위치로 확인한다.
+          const recent = await verifyRecentPhotoByCurrentLocation(spot, file);
+          if (recent) validation = recent;
+        }
+        if (noGps && !validation.isValid) {
           let allowed = false;
           try { const { data, error } = await client.rpc('can_upload_unverified'); allowed = !error && data === true; } catch (error) { allowed = false; }
           if (allowed) { setFeedback('', '', '', ''); showUnverifiedBox(spot, file); return; }
