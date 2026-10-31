@@ -355,7 +355,7 @@
             <label class="form-label" for="free-weather-note">기타 날씨 (10자 이하)</label>
             <input type="text" id="free-weather-note" maxlength="10" placeholder="날씨를 적어 주세요" style="width:100%;padding:10px 12px;border:1px solid var(--bg-border);border-radius:var(--radius-sm);font-size:13px;font-family:var(--font-sans);">
           </div>
-          <div class="form-group">
+          <div class="form-group" data-nickname-group>
             <label class="form-label" for="free-nickname">닉네임 (1~20자)</label>
             <input type="text" id="free-nickname" maxlength="20" required autocomplete="nickname" placeholder="닉네임을 입력해 주세요" style="width:100%;padding:10px 12px;border:1px solid var(--bg-border);border-radius:var(--radius-sm);font-size:13px;font-family:var(--font-sans);">
           </div>

@@ -12,3 +12,7 @@ img.brand-logo { object-fit: contain; }
 /* 첫 화면 계절 칩은 사진(명소로 이동 버튼) 위에서 직접 눌려야 함 */
 .home-hero-chips, .home-hero-chips .season-chip { pointer-events: auto; position: relative; z-index: 3; }
 .info-credit { margin-top: 18px; color: var(--text-muted); font-size: 11px; }
+.me-nickname-form { width: 100%; margin-top: 4px; text-align: left; }
+.me-nickname-row { display: flex; gap: 8px; }
+.me-nickname-row .auth-input { flex: 1; margin-bottom: 0; }
+.me-nickname-status { min-height: 18px; margin: 6px 0 0; color: var(--text-muted); font-size: 12px; }

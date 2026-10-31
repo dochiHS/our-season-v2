@@ -91,6 +91,8 @@
           <div class="auth-confirm-group" hidden>
             <label class="auth-field-label" for="auth-password-confirm">비밀번호 확인</label>
             <input class="auth-input" id="auth-password-confirm" name="password-confirm" type="password" autocomplete="new-password" minlength="6" placeholder="비밀번호를 다시 입력해 주세요">
+            <label class="auth-field-label" for="auth-nickname">닉네임 (1~20자)</label>
+            <input class="auth-input" id="auth-nickname" name="nickname" type="text" maxlength="20" autocomplete="nickname" placeholder="사진에 함께 표시돼요">
           </div>
           <p class="auth-status" role="status" aria-live="polite" hidden></p>
           <button class="btn-submit-upload auth-submit" type="submit">로그인</button>
@@ -137,12 +139,16 @@
       if (mode === 'signup' && password !== confirmInput.value) {
         setStatus('비밀번호가 서로 달라요.', true); return;
       }
+      const nickname = (authModal.querySelector('#auth-nickname').value || '').trim();
+      if (mode === 'signup' && (Array.from(nickname).length < 1 || Array.from(nickname).length > 20)) {
+        setStatus('닉네임을 1~20자로 입력해 주세요.', true); return;
+      }
       const db = getClient();
       if (!db || !db.auth) { setStatus('로그인 기능을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.', true); return; }
       busy = true; submitButton.disabled = true; setStatus('', false);
       try {
         const result = mode === 'signup'
-          ? await db.auth.signUp({ email, password })
+          ? await db.auth.signUp({ email, password, options: { data: { nickname } } })
           : await db.auth.signInWithPassword({ email, password });
         if (result.error) throw result.error;
         if (mode === 'signup' && !(result.data && result.data.session)) {
@@ -184,6 +190,23 @@
     return new Promise(resolve => { pendingLogin = resolve; });
   }
 
+  function getNickname(user) {
+    const value = user && user.user_metadata && user.user_metadata.nickname;
+    return typeof value === 'string' ? value.trim() : '';
+  }
+
+  async function setNickname(nickname) {
+    const value = String(nickname || '').trim();
+    if (Array.from(value).length < 1 || Array.from(value).length > 20) throw new Error('닉네임을 1~20자로 입력해 주세요.');
+    const db = getClient();
+    if (!db || !db.auth) throw new Error('로그인 기능을 불러오지 못했어요.');
+    const result = await db.auth.updateUser({ data: { nickname: value } });
+    if (result.error) throw result.error;
+    const user = result.data && result.data.user;
+    if (typeof global.CustomEvent === 'function') global.dispatchEvent(new CustomEvent('authchange', { detail: { user } }));
+    return user;
+  }
+
   async function signOut() {
     const db = getClient();
     if (!db || !db.auth) return;
@@ -191,7 +214,7 @@
     if (result.error) throw result.error;
   }
 
-  global.OurAuth = Object.freeze({ getClient, getUser, requireLogin, signOut });
+  global.OurAuth = Object.freeze({ getClient, getUser, requireLogin, signOut, getNickname, setNickname });
 
   function renderHomeAuthStatus(user) {
     const container = document.getElementById('home-auth-status');
@@ -202,7 +225,7 @@
     if (!container || !login || !name || !separator || !logout) return;
     const loggedIn = Boolean(user);
     login.hidden = loggedIn;
-    name.textContent = loggedIn ? `${String(user.email || '').split('@')[0]}님` : '';
+    name.textContent = loggedIn ? `${getNickname(user) || String(user.email || '').split('@')[0]}님` : '';
     name.hidden = !loggedIn;
     separator.hidden = !loggedIn;
     logout.hidden = !loggedIn;
