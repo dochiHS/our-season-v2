@@ -186,6 +186,10 @@
     let longitude = convertDmsToDecimal(lonDms);
     if (latRef === 'S') latitude = -latitude;
     if (lonRef === 'W') longitude = -longitude;
+    // 안드로이드 사진 선택 창은 위치를 지울 때 좌표를 0,0으로 바꿔 넘긴다. 위치 없음으로 본다.
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || (Math.abs(latitude) < 0.0001 && Math.abs(longitude) < 0.0001)) {
+      return { latitude: null, longitude: null, imgDirection };
+    }
     return { latitude, longitude, imgDirection };
   }
 
