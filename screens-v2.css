@@ -123,3 +123,10 @@
 .auth-social-kakao { border: 0; background: #FEE500; color: #191919; }
 .auth-social-naver { border: 0; background: #03C75A; color: #fff; }
 .auth-social-google { border: 1px solid var(--bg-border); background: #fff; color: #1f1f1f; }
+
+/* 등록 확인 중: 버튼 글자 옆에 도는 표시, 안내 상자 글자 조금 크게 */
+.btn-submit-upload.is-busy { opacity: 1 !important; cursor: progress; }
+.btn-submit-upload.is-busy::before { content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 8px; vertical-align: -2px; border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; border-radius: 50%; animation: submit-spin .8s linear infinite; }
+@keyframes submit-spin { to { transform: rotate(360deg); } }
+.validation-feedback-box.status-checking { font-size: 13px; }
+.validation-feedback-box.status-checking .feedback-title { color: var(--text-primary); font-weight: 750; }

@@ -210,7 +210,7 @@
   }
   async function requestUserLocation(showError) {
     try {
-      state.userCoords = await global.UploadValidator.getCurrentUserPosition(); if (elements.gpsStatusLabel) elements.gpsStatusLabel.textContent = '위치 확인됨'; if (elements.btnRequestLocation) elements.btnRequestLocation.classList.add('is-active');
+      state.userCoords = await global.UploadValidator.getCurrentUserPosition(); state.userCoordsAt = Date.now(); if (elements.gpsStatusLabel) elements.gpsStatusLabel.textContent = '위치 확인됨'; if (elements.btnRequestLocation) elements.btnRequestLocation.classList.add('is-active');
       setAppNotice('', ''); refreshSpots(); renderTabs(); renderSummaryCard(); renderPointTabs(); renderMatrix(); updateUploadButton(); notifySpotStateChange(); return true;
     } catch (error) { if (showError) setAppNotice(error.message || '현재 위치를 확인할 수 없습니다.', 'error'); return false; }
   }
@@ -236,7 +236,7 @@
     const status = state.userCoords ? getNearestPointStatus(spot) : null;
     setUploadDistanceNotice(status && status.withinAnyPoint ? '지금 현장에 있어요 · 바로 찍어서 올릴 수 있어요' : '이곳에서 찍은 사진이면 언제든 올릴 수 있어요');
   }
-  function setFeedback(status, title, message, hint) { if (!elements.validationFeedbackCard) return; elements.validationFeedbackCard.className = 'validation-feedback-box'; if (status) elements.validationFeedbackCard.classList.add(status); elements.feedbackTitle.textContent = title || ''; elements.feedbackMessage.textContent = message || ''; elements.feedbackMessage.style.whiteSpace = 'pre-line'; elements.feedbackHint.textContent = hint || ''; }
+  function setFeedback(status, title, message, hint) { if (!elements.validationFeedbackCard) return; if (status) global.requestAnimationFrame(() => { try { elements.validationFeedbackCard.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (error) { /* 무시 */ } }); elements.validationFeedbackCard.className = 'validation-feedback-box'; if (status) elements.validationFeedbackCard.classList.add(status); elements.feedbackTitle.textContent = title || ''; elements.feedbackMessage.textContent = message || ''; elements.feedbackMessage.style.whiteSpace = 'pre-line'; elements.feedbackHint.textContent = hint || ''; }
   function getCaptureSeason(takenAt) { const date = takenAt ? new Date(takenAt) : new Date(); return global.SpotData.getCurrentSeason(Number.isNaN(date.getTime()) ? new Date() : date); }
   function formatKstDate(date) { const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(date); const values = Object.fromEntries(parts.map(part => [part.type, part.value])); return `${values.year}.${values.month}.${values.day}`; }
   function updateSeasonDisplay(takenAt) { const season = getCaptureSeason(takenAt); if (elements.seasonInput) elements.seasonInput.value = season; if (elements.seasonDisplay) elements.seasonDisplay.value = `${global.SpotData.SEASONS_KO[season]} · ${takenAt ? `촬영일 ${formatKstDate(new Date(takenAt))}` : '오늘 날짜 기준'}`; if (elements.headerArch) elements.headerArch.dataset.season = season; }
@@ -351,6 +351,7 @@
     const faceConfirmed = Boolean(elements.faceConfirmationCheckbox && elements.faceConfirmationCheckbox.checked);
     if (elements.faceConfirmationWarning) elements.faceConfirmationWarning.hidden = faceConfirmed;
     if (elements.btnSubmitPhoto) elements.btnSubmitPhoto.disabled = isSubmitting || !hasFile || !faceConfirmed;
+    if (elements.btnSubmitPhoto) { elements.btnSubmitPhoto.textContent = isSubmitting ? '확인하고 있어요…' : '위치 검증 후 등록하기'; elements.btnSubmitPhoto.classList.toggle('is-busy', isSubmitting); }
   }
   function updateSelectedChips() { document.querySelectorAll('#upload-form input[type="radio"]').forEach(input => { const label = input.closest('.chip-option'); if (label) label.classList.toggle('selected', input.checked); }); }
   async function readSelectedPhotoTime(file) {
@@ -377,6 +378,23 @@
   function closeUploadModal() { if (elements.uploadModal) elements.uploadModal.classList.remove('open'); }
   function createRandomUuid() { if (global.crypto && typeof global.crypto.randomUUID === 'function') return global.crypto.randomUUID(); if (!global.crypto || typeof global.crypto.getRandomValues !== 'function') throw new Error('안전한 무작위 ID를 만들 수 없습니다. HTTPS 환경에서 다시 시도해 주세요.'); const bytes = new Uint8Array(16); global.crypto.getRandomValues(bytes); bytes[6] = (bytes[6] & 15) | 64; bytes[8] = (bytes[8] & 63) | 128; return Array.from(bytes, (byte, index) => { const value = byte.toString(16).padStart(2, '0'); return [4, 6, 8, 10].includes(index) ? `-${value}` : value; }).join(''); }
   function validateNickname(value) { const nickname = value.trim(), length = Array.from(nickname).length; if (length < 1 || length > 20) throw new Error('닉네임을 1~20자로 입력해 주세요.'); return nickname; }
+  // 안드로이드에서 정밀 위치가 멈춰 있다가 앱을 나갔다 와야 끝나는 경우가 있어, 앱이 직접 시간을 재고 넘어간다.
+  // 1) 2분 안에 확인한 위치가 있으면 그대로 쓰고 2) 정밀 위치를 8초 기다린 뒤 3) 대략 위치를 5초 더 기다린다.
+  function positionWithin(ms, options) {
+    return new Promise(resolve => {
+      let done = false;
+      const finish = value => { if (!done) { done = true; resolve(value); } };
+      const timer = global.setTimeout(() => finish(null), ms);
+      global.UploadValidator.getCurrentUserPosition(options).then(coords => { global.clearTimeout(timer); finish(coords || null); }, () => { global.clearTimeout(timer); finish(null); });
+    });
+  }
+  async function getPositionQuickly() {
+    if (state.userCoords && state.userCoordsAt && Date.now() - state.userCoordsAt < 2 * 60 * 1000 && Number(state.userCoords.accuracy) <= 100) return state.userCoords;
+    let coords = await positionWithin(8000, { enableHighAccuracy: true, timeout: 7500, maximumAge: 60000 });
+    if (!coords) coords = await positionWithin(5000, { enableHighAccuracy: false, timeout: 4500, maximumAge: 300000 });
+    if (coords) state.userCoordsAt = Date.now();
+    return coords;
+  }
   async function verifyRecentPhotoByCurrentLocation(spot, file) {
     let takenAt = state.selectedTakenAt;
     if (!takenAt && global.ExifGpsReader) { try { takenAt = await global.ExifGpsReader.extractDateTimeOriginal(file); } catch (error) { takenAt = null; } }
@@ -384,7 +402,7 @@
     const age = Date.now() - takenTime;
     if (!Number.isFinite(takenTime) || age < -10 * 60 * 1000 || age > 3 * 60 * 60 * 1000) return null;
     let coords;
-    try { coords = await global.UploadValidator.getCurrentUserPosition(); } catch (error) { return null; }
+    coords = await getPositionQuickly();
     if (!coords) return null;
     state.userCoords = coords;
     const accuracy = Number.isFinite(coords.accuracy) ? Math.min(Math.max(coords.accuracy, 0), 100) : 0;
@@ -446,6 +464,7 @@
         if (noGps) {
           // 안드로이드 사진 선택 창은 사생활 보호로 사진 속 GPS를 지운다.
           // 방금(3시간 안) 찍은 사진이고 지금 현장 반경 안에 있으면, 현재 위치로 확인한다.
+          setFeedback('status-checking', '지금 계신 위치를 확인하고 있어요', '사진에 위치 정보가 없어서 현재 위치로 확인합니다. 10초쯤 걸릴 수 있어요.');
           const recent = await verifyRecentPhotoByCurrentLocation(spot, file);
           if (recent) validation = recent;
         }
